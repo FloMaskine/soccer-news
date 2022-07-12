@@ -21,12 +21,17 @@ public class NewsViewModel extends ViewModel {
 
     private final SoccerNewsApi api;
 
+
+
+
     public NewsViewModel() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://flomaskine.github.io/soccer-news-api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         api = retrofit.create(SoccerNewsApi.class);
+
+
         loadNews();
 
     }
@@ -35,7 +40,7 @@ public class NewsViewModel extends ViewModel {
         api.getNews().enqueue(new retrofit2.Callback<List<News>>() {
             @Override
             public void onResponse(@NonNull Call<List<News>> call, @NonNull retrofit2.Response<List<News>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     news.setValue(response.body());
 
                 } else {
@@ -56,5 +61,9 @@ public class NewsViewModel extends ViewModel {
 
     public MutableLiveData<List<News>> getNews() {
         return this.news;
+    }
+
+    public void addToFavorites(News newsItem) {
+        Log.d("NewsViewModel", "Adding to favorites");
     }
 }

@@ -17,9 +17,11 @@ import java.util.List;
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
     private final List<News> newsList;
+    private final FavoriteListener favoriteListener;
 
-    public NewsAdapter(List<News> newsList) {
+    public NewsAdapter(List<News> newsList, FavoriteListener favoriteListener) {
         this.newsList = newsList;
+        this.favoriteListener = favoriteListener;
     }
 
     @NonNull
@@ -35,11 +37,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         News news = this.newsList.get(position);
         holder.bind(news);
+        //Open the link in browser when user clicks on the button
         holder.binding.openNews.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(news.getLink()));
+            intent.setData(Uri.parse(news.link));
             holder.binding.getRoot().getContext().startActivity(intent);
         });
+        //Share the link when user clicks on the button
+        holder.binding.ivShare.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, news.link);
+            intent.putExtra(Intent.EXTRA_TEXT, news.link);
+            holder.binding.getRoot().getContext().startActivity(Intent.createChooser(intent, "Share link using"));
+        });
+        holder.binding.ivFavoriteIcon.setOnClickListener(v -> {
+            news.favorite = !news.favorite;
+            favoriteListener.onFavoriteClicked(news);
+            notifyItemChanged(position);
+        });
+
+
+
 
 
     }
@@ -59,14 +78,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         }
 
         public void bind(News news) {
-            binding.newsTitle.setText(news.getTitle());
-            binding.newsDescription.setText(news.getDescription());
-            Picasso.get().load(news.getImage())
+            binding.newsTitle.setText(news.title);
+            binding.newsDescription.setText(news.description);
+            Picasso.get().load(news.image)
                     .fit()
                     .into(binding.newsImage);
 
         }
 
+
+    }
+
+    public interface FavoriteListener {
+        void onFavoriteClicked(News news);
 
     }
 }
