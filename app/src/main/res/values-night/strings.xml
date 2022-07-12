@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="share_link_text">Share link using</string>
+    <string name="data_loaded_sucessfully">Data Loaded Sucessfully</string>
 </resources>

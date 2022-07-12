@@ -9,5 +9,7 @@
     <string name="favorite_icon">Favorite icon</string>
     <string name="open_link">Open Link</string>
     <string name="share_link_text">Share link using</string>
+    <string name="data_loaded_sucessfully">Data Loaded Sucessfully</string>
+    <string name="error_api">Something went wrong!</string>
 
 </resources>

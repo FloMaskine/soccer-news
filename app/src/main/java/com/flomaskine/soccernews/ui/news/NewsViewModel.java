@@ -17,11 +17,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NewsViewModel extends ViewModel {
 
+    public enum State {
+        DOING,
+        DONE,
+        ERROR
+    }
+
+
     private final MutableLiveData<List<News>> news = new MutableLiveData<>();
+    private final MutableLiveData<State> state = new MutableLiveData<>();
 
     private final SoccerNewsApi api;
-
-
 
 
     public NewsViewModel() {
@@ -37,24 +43,25 @@ public class NewsViewModel extends ViewModel {
     }
 
     private void loadNews() {
+        state.setValue(State.DOING);
         api.getNews().enqueue(new retrofit2.Callback<List<News>>() {
             @Override
             public void onResponse(@NonNull Call<List<News>> call, @NonNull retrofit2.Response<List<News>> response) {
                 if (response.isSuccessful()) {
+                    state.setValue(State.DONE);
                     news.setValue(response.body());
 
                 } else {
-                    news.setValue(null);
-                    //TODO handle error
-                    Log.e("NewsViewModel", "Error getting data");
+                    state.setValue(State.ERROR);
+                    Log.e("NewsViewModel", "Error getting data onResponse");
+
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<List<News>> call, @NonNull Throwable t) {
-                news.setValue(null);
-                //TODO handle error
-                Log.e("NewsViewModel", "Error getting data", t);
+                state.setValue(State.ERROR);
+                Log.e("NewsViewModel", "Error getting data onFailure", t);
             }
         });
     }
@@ -63,7 +70,7 @@ public class NewsViewModel extends ViewModel {
         return this.news;
     }
 
-    public void addToFavorites(News newsItem) {
-        Log.d("NewsViewModel", "Adding to favorites");
-    }
+    public MutableLiveData<State> getState() { return this.state; }
+
+
 }

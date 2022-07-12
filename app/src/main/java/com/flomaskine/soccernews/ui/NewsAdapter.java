@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.flomaskine.soccernews.MainActivity;
+import com.flomaskine.soccernews.R;
 import com.flomaskine.soccernews.databinding.NewsItemBinding;
 import com.flomaskine.soccernews.domain.News;
 import com.squareup.picasso.Picasso;
@@ -49,17 +51,26 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_SUBJECT, news.link);
             intent.putExtra(Intent.EXTRA_TEXT, news.link);
-            holder.binding.getRoot().getContext().startActivity(Intent.createChooser(intent, "Share link using"));
+            holder.binding.getRoot().getContext().startActivity(
+                    Intent.createChooser(
+                            intent,
+                            "Share link using"
+                    ));
         });
         holder.binding.ivFavoriteIcon.setOnClickListener(v -> {
             news.favorite = !news.favorite;
             favoriteListener.onFavoriteClicked(news);
             notifyItemChanged(position);
+
+
         });
-
-
-
-
+        //change the icon of the favorite button depending on the favorite status
+        if (news.favorite) {
+            holder.binding.ivFavoriteIcon.setImageResource(R.drawable.ic_favorite_icon);
+        } else {
+            holder.binding.ivFavoriteIcon.setImageResource(R.drawable.ic_favorite_off_icon);
+            MainActivity.db.newsDao().delete(news);
+        }
 
     }
 

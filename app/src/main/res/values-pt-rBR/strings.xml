@@ -10,5 +10,7 @@
     <string name="favorite_icon">Ícone de favoritar</string>
     <string name="open_link">Abrir Link</string>
     <string name="share_link_text">Compartilhe o link usando…</string>
+    <string name="data_loaded_sucessfully">Dados Carregados com Sucesso!</string>
+    <string name="error_api">Algo deu errado!</string>
 
 </resources>
