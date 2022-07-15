@@ -33,7 +33,7 @@ public class NewsFragment extends Fragment {
         binding.rvNews.setLayoutManager(new LinearLayoutManager(getContext()));
         observeNews();
         observeStatus();
-        binding.srlNews.setOnRefreshListener(newsViewModel::loadNews);
+        binding.srlNews.setOnRefreshListener(newsViewModel::loadNewsFromGitHub);
 
 
         return root;

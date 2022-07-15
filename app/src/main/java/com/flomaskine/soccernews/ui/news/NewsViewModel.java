@@ -30,11 +30,11 @@ public class NewsViewModel extends ViewModel {
     public NewsViewModel() {
 
 
-        loadNews();
+        loadNewsFromGitHub();
 
     }
 
-    public void loadNews() {
+    public void loadNewsFromGitHub() {
         state.setValue(State.DOING);
         SoccerNewsRepository.getInstance().getRemoteApi().getNews().enqueue(new retrofit2.Callback<List<News>>() {
             @Override
