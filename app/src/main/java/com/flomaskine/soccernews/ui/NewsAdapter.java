@@ -2,14 +2,15 @@ package com.flomaskine.soccernews.ui;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.flomaskine.soccernews.MainActivity;
 import com.flomaskine.soccernews.R;
+import com.flomaskine.soccernews.data.SoccerNewsRepository;
 import com.flomaskine.soccernews.databinding.NewsItemBinding;
 import com.flomaskine.soccernews.domain.News;
 import com.squareup.picasso.Picasso;
@@ -64,12 +65,16 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
 
         });
-        //change the icon of the favorite button depending on the favorite status
+        //Change the icon of the favorite button depending on the favorite status and deletes
+        // the news from the list when unfavorite button is clicked
+
         if (news.favorite) {
             holder.binding.ivFavoriteIcon.setImageResource(R.drawable.ic_favorite_icon);
         } else {
             holder.binding.ivFavoriteIcon.setImageResource(R.drawable.ic_favorite_off_icon);
-            MainActivity.db.newsDao().delete(news);
+            AsyncTask.execute(() -> {
+                SoccerNewsRepository.getInstance().getLocalDb().newsDao().delete(news);
+            });
         }
 
     }
